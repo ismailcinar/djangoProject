@@ -1,8 +1,10 @@
+import imp
 from multiprocessing import context
 from django.shortcuts import render
 from django.http import HttpResponse
 from django.template import loader
 from .models import Author
+from django.http import Http404
 
 # Create your views here.
 
@@ -18,8 +20,10 @@ def authors(request):
 def books(request):
     return HttpResponse("Books")
 def authorDetails(request,authorId):
-   #  template = loader.get_template('authorDetail.html')
-     context = {
+    try:   
+        context = {
         'author_detail' : Author.objects.get(pk=authorId)
     } 
+    except Author.DoesNotExist:
+        raise Http404("Yazar bulunamadı")
     return render(request,'authorDetail.html',context)
