@@ -1,9 +1,10 @@
 from email import message
+from multiprocessing import context
 from django.shortcuts import render, redirect
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
-from .forms import UserRegisterForm
+from .forms import UserRegisterForm, UserUptadeForm, ProfileUptadeForm
 # Create your views here.
 
 def register(request):
@@ -21,7 +22,24 @@ def register(request):
 
 @login_required
 def profile(request):
-    return render(request, 'users/profile.html')
+    if request.method == 'POST':
+         u_form = UserUptadeForm(request.POST, instance=request.user)
+         p_form = ProfileUptadeForm(request.POST,
+                                    request.FILES, 
+                                    instance=request.user.profile)
+         if u_form.is_valid() and p_form.is_valid():
+             u_form.save()
+             p_form.save()
+             messages.success(request, f'Your account has been updated')
+             return redirect('profile')
+    else:
+        u_form = UserUptadeForm(instance=request.user)
+        p_form = ProfileUptadeForm(instance=request.user.profile)
+    context = {
+        'u_form' : u_form,
+        'p_form' : p_form
+    }
+    return render(request, 'users/profile.html',context)
 
 # messages.debug
 # messages.info
