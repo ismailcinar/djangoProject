@@ -1,7 +1,7 @@
 from multiprocessing import context
 from django.shortcuts import render
 from django.http import HttpResponse
-from django.views.generic import ListView
+from django.views.generic import ListView, DetailView
 from .models import Post
 
 
@@ -33,6 +33,11 @@ class PostListView(ListView):
   template_name = 'blog/home.html'   #<app>/<model>_<viewtype>.html
   context_object_name = 'posts'
   ordering = ['-date_posted']
+
+class PostDetailView(DetailView):
+  model = Post
+ 
+  
 
 def about(request):
   #  return HttpResponse('<h1>Blog About</h1>')
