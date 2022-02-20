@@ -31,7 +31,7 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
-    'leads' # // when you add new ..
+    'leads', # // when you add new ..
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
